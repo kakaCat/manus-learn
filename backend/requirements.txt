@@ -1,0 +1,29 @@
+# LangChain and LangGraph
+langchain>=0.1.0
+langchain-community>=0.0.10
+langgraph>=0.0.20
+
+# MCP SDK for connecting to sandbox servers
+mcp>=1.0.0
+
+# LLM Support
+# Option 1: Ollama (local, free)
+ollama>=0.1.0
+langchain-ollama>=0.0.1
+
+# Option 2: DeepSeek API (if using cloud version)
+# openai>=1.0.0  # DeepSeek compatible with OpenAI SDK
+
+# Web Framework (for API endpoints)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+websockets>=12.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+aiofiles>=23.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0

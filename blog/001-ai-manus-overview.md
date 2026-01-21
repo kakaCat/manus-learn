@@ -27,7 +27,7 @@ topics:
   - Python Programming
 ---
 
-# 仿manus：从零开始构建 AI Agent 系统
+# 从零开始构建 Manus 系统
 
 ## 📍 项目介绍
 
