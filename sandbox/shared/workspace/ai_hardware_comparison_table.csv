@@ -1,0 +1,16 @@
+Category,Chip Model,Manufacturer,Release Date,Process Node,Peak Performance,Memory Bandwidth,Memory Capacity,Power Consumption,Key Features,Target Applications
+Cloud AI,NVIDIA H200,NVIDIA,2024Q1,4nm,1979 TFLOPS (FP8),4.8 TB/s,141GB HBM3e,700W,Hopper架构,HBM3e内存,大规模训练和推理
+Cloud AI,AMD MI300X,AMD,2023Q4,5nm,1634 TFLOPS (FP16),5.2 TB/s,192GB HBM3,750W,CDNA3架构,192GB显存,大模型训练,HPC
+Cloud AI,Google TPU v5,Google,2024,4nm,2750 TFLOPS (BF16),3.0 TB/s,128GB HBM,900W,液冷设计,能效比2倍提升,Google Cloud AI服务
+Cloud AI,AWS Trainium2,AWS,2024,5nm,340 TFLOPS (BF16),2.1 TB/s,96GB HBM2e,300W,专门优化训练,4倍性能提升,AWS SageMaker训练
+Cloud AI,Intel Gaudi 3,Intel,2024Q2,5nm,1835 TFLOPS (BF16),3.7 TB/s,128GB HBM2e,600W,支持FP8,128GB显存,企业级AI训练
+Edge AI,Qualcomm AI 100 Pro,Qualcomm,2024,4nm,200 TOPS,819 GB/s,128GB LPDDR5X,75W,多模态AI支持,低延迟推理,智能手机,XR设备
+Edge AI,NVIDIA Jetson Orin Nano,NVIDIA,2023,8nm,40 TOPS,102 GB/s,8GB LPDDR5,10W,小型化设计,ROS2支持,机器人,无人机
+Edge AI,AMD Versal AI Edge,AMD,2024,7nm,171 TOPS,256 GB/s,16GB LPDDR4X,30W,自适应计算,实时AI处理,工业视觉,自动驾驶
+Edge AI,Intel Meteor Lake,Intel,2023,Intel 4,34 TOPS,120 GB/s,64GB LPDDR5X,28W,集成NPU,能效优化,笔记本电脑,IoT
+Edge AI,Hailo-8,Hailo,2023,16nm,26 TOPS,68 GB/s,4GB LPDDR4,2.5W,超低功耗,边缘推理,智能摄像头,安防
+Emerging,Mythic AMP,Mythic,2023,28nm,25 TOPS,N/A,8MB SRAM,3W,存算一体,模拟计算,语音识别,传感器处理
+Emerging,Lightmatter Envise,Lightmatter,2024,7nm,420 TFLOPS,5.6 TB/s,64GB HBM2e,150W,光子计算,光速矩阵运算,光学神经网络
+China,Huawei Ascend 910B,Huawei,2023,7nm,640 TFLOPS (FP16),2.0 TB/s,32GB HBM2,310W,国产替代,对标A100,云端训练
+China,Cambricon Siyuan 590,Cambricon,2023,7nm,512 TFLOPS (FP16),1.8 TB/s,64GB HBM2,350W,云端训练芯片,大模型支持,AI服务器
+China,Horizon Journey 6,Horizon,2024,16nm,560 TOPS,200 GB/s,16GB LPDDR5,30W,自动驾驶芯片,多传感器融合,智能驾驶

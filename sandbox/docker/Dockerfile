@@ -2,9 +2,13 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Configure apt source to use Aliyun mirror
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|http://mirrors.aliyun.com/ubuntu/|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.ubuntu.com/ubuntu/|http://mirrors.aliyun.com/ubuntu/|g' /etc/apt/sources.list && \
+    sed -i 's|http://ports.ubuntu.com/ubuntu-ports/|http://mirrors.aliyun.com/ubuntu-ports/|g' /etc/apt/sources.list
+
 # Install dependencies
-RUN sed -i 's/ports.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
-    apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     xvfb \
     x11vnc \
     fluxbox \
@@ -14,6 +18,7 @@ RUN sed -i 's/ports.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
     net-tools \
     python3-numpy \
     xterm \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install development tools and dependencies for MCP servers
@@ -25,6 +30,7 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     build-essential \
     git \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python 3.11+
@@ -34,20 +40,49 @@ RUN add-apt-repository ppa:deadsnakes/ppa -y && \
     python3.11-venv \
     python3.11-dev \
     python3-pip \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Set Python 3.11 as default
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 
+# Configure pip to use Aliyun mirror
+RUN pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+
 # Install Node.js 20.x
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
     apt-get install -y nodejs && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Chromium browser and chromedriver
+# Configure npm to use Aliyun mirror
+RUN npm config set registry https://registry.npmmirror.com
+
+# Install Chromium from PPA (better compatibility)
+# Note: Need to use python3.10 for add-apt-repository due to apt_pkg dependency
+RUN PYTHON_VERSION=$(python3 --version) && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2 && \
+    add-apt-repository ppa:xtradeb/apps -y && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
+    apt-get update && \
+    apt-get install -y chromium --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create symbolic link for chromium-browser
+RUN ln -sf /usr/bin/chromium /usr/bin/chromium-browser
+
+# Install Chinese fonts and language support
 RUN apt-get update && apt-get install -y \
-    chromium-browser \
-    chromium-chromedriver \
+    fonts-noto-cjk \
+    fonts-noto-color-emoji \
+    language-pack-zh-hans \
+    locales \
+    && locale-gen zh_CN.UTF-8 \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install official MCP servers
@@ -57,18 +92,19 @@ RUN npm install -g chrome-devtools-mcp@latest && \
 # Create MCP servers directories
 RUN mkdir -p /opt/mcp-servers /var/log/mcp /root/shared/workspace /root/shared/workspace/screenshots /root/shared/workspace/downloads
 
-# Set up Python virtual environment for MCP servers (outside mounted directory)
+# Set up Python virtual environment for MCP servers
 RUN python3.11 -m venv /opt/mcp-venv
 
-# Copy requirements file and install MCP server dependencies
-# Note: MCP server code will be mounted via docker-compose volume to /opt/mcp-servers
-COPY mcp-servers/requirements.txt /tmp/mcp-requirements.txt
+# Copy MCP server code and requirements
+COPY mcp-servers /opt/mcp-servers
+
+# Install MCP server dependencies
 RUN /opt/mcp-venv/bin/pip install --upgrade pip && \
-    /opt/mcp-venv/bin/pip install -r /tmp/mcp-requirements.txt && \
-    rm /tmp/mcp-requirements.txt
+    /opt/mcp-venv/bin/pip install -r /opt/mcp-servers/requirements.txt
 
 # Configuration
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/launch_chrome.sh /usr/local/bin/launch_chrome.sh
 
 # Environment variables
 ENV DISPLAY=:1

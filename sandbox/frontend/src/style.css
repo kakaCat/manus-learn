@@ -1,6 +1,5 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #2c3e50;
-  font-family: Arial, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles can go here */

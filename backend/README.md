@@ -1,280 +1,313 @@
-# Sandbox AI Backend
+# Backend - Refactored Architecture
 
-LangChain + MCP backend for AI-powered sandbox control.
+## 🎯 Overview
 
-## Architecture
+Manus Learn backend 已重构为 **LangChain 1.X + LangGraph** 最佳实践架构,采用模块化设计。
+
+**版本**: 2.0.0
+**核心技术**:
+- **LangGraph**: ReAct agent with `create_react_agent`
+- **MemorySaver**: Thread-based conversation memory
+- **MCP Protocol**: Tool integration via stdio
+- **FastAPI**: Async web framework
+
+---
+
+## 📁 Project Structure
 
 ```
-┌─────────────────────────────────────────────┐
-│ Frontend (Vue + noVNC + Chat)               │
-│   - Port 5173                               │
-│   - WebSocket client                        │
-└─────────────────┬───────────────────────────┘
-                  │ WebSocket
-                  ↓
-┌─────────────────────────────────────────────┐
-│ Backend (FastAPI + LangChain)               │
-│   - Port 8000                               │
-│   - LangChain Agent                         │
-│   - Ollama/DeepSeek LLM                    │
-└─────────────────┬───────────────────────────┘
-                  │ MCP Protocol (stdio)
-                  ↓
-┌─────────────────────────────────────────────┐
-│ Docker Container (sandbox-os)               │
-│   - Shell MCP Server (4 tools)             │
-│   - Filesystem MCP Server (8 tools)        │
-│   - Chrome MCP Server (9 tools)            │
-│   - VNC Display at :1                       │
-└─────────────────────────────────────────────┘
+backend/
+├── app/                          # 主应用包
+│   ├── __init__.py              # App 初始化
+│   ├── main.py                  # FastAPI 应用工厂 (精简版)
+│   │
+│   ├── core/                    # 核心配置和基础设施
+│   │   ├── __init__.py
+│   │   ├── config.py           # Pydantic Settings (环境变量)
+│   │   ├── llm.py              # LLM 初始化 (Ollama/DeepSeek)
+│   │   └── logging.py          # 日志配置
+│   │
+│   ├── models/                  # Pydantic 数据模型
+│   │   ├── __init__.py
+│   │   ├── chat.py             # ChatMessage, ChatRequest, ChatResponse
+│   │   └── sandbox.py          # SandboxStatus, ProcessList, etc.
+│   │
+│   ├── services/                # 业务逻辑层
+│   │   ├── __init__.py
+│   │   ├── agent.py            # SandboxAgent (LangGraph + MemorySaver)
+│   │   ├── mcp_client.py       # MCPClientManager (docker exec)
+│   │   └── chat_history.py     # ChatHistoryManager (兼容旧 API)
+│   │
+│   ├── api/                     # API 路由层
+│   │   ├── __init__.py
+│   │   ├── deps.py             # 依赖注入 (future auth)
+│   │   ├── chat.py             # Chat endpoints (WebSocket + REST)
+│   │   └── sandbox.py          # Sandbox monitoring endpoints
+│   │
+│   └── utils/                   # 工具函数
+│       └── __init__.py
+│
+├── tests/                       # 测试文件
+│   └── test_agent.py
+│
+├── .env                         # 环境变量配置
+├── .env.example                 # 环境变量模板
+├── requirements.txt             # Python 依赖
+└── README.md                    # 本文档
 ```
 
-## Features
+---
 
-- **LangChain Agent**: AI agent with MCP tool access
-- **21 MCP Tools**: Shell commands, file operations, browser control
-- **WebSocket API**: Real-time chat with the AI
-- **Ollama Support**: Local LLM (no API keys required)
-- **DeepSeek Support**: Cloud LLM option
-
-## Quick Start
+## 🚀 Quick Start
 
 ### 1. Install Dependencies
 
 ```bash
 cd backend
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Install Ollama (Recommended)
-
-```bash
-# macOS
-brew install ollama
-
-# Start Ollama service
-ollama serve
-
-# Pull a model (choose one)
-ollama pull deepseek-r1:1.5b  # Fastest, 1.5B params
-ollama pull qwen2.5:7b         # Balanced, 7B params
-ollama pull llama3.1:8b        # High quality, 8B params
-```
-
-### 3. Configure Environment
+### 2. Configure Environment
 
 ```bash
 cp .env.example .env
-
-# Edit .env
-# Set OLLAMA_MODEL to the model you pulled
+# Edit .env to configure LLM provider
 ```
 
-### 4. Start Backend Server
+### 3. Start Server
 
+```bash
+# Development mode (auto-reload)
+python -m app.main
+
+# Or using uvicorn directly
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+---
+
+## 🔧 Key Architectural Changes
+
+### 1. **LangGraph ReAct Agent** ([app/services/agent.py](app/services/agent.py))
+
+使用 `create_react_agent` 替代旧的 `AgentExecutor`:
+
+```python
+from langgraph.prebuilt import create_react_agent
+from langgraph.checkpoint.memory import MemorySaver
+
+self.checkpointer = MemorySaver()  # In-memory conversation state
+
+self.agent = create_react_agent(
+    self.llm,
+    self.tools,
+    prompt=prompt,
+    checkpointer=self.checkpointer,  # Enable memory!
+)
+```
+
+**新特性**:
+- ✅ **Thread-based memory**: 每个对话有独立的 `thread_id`
+- ✅ **Automatic checkpointing**: 对话状态自动持久化
+- ✅ **Backward compatible**: 仍支持旧的 `chat_history` 参数
+
+### 2. **Memory Management**
+
+两种内存机制:
+
+**A. LangGraph MemorySaver** (推荐)
+```python
+# Agent 自动管理,通过 thread_id 隔离对话
+response = await sandbox_agent.run(
+    user_input="Hello",
+    thread_id="user-123"  # 同一 thread_id = 同一对话
+)
+```
+
+**B. ChatHistoryManager** (向后兼容)
+```python
+# 传统方式,手动管理历史
+from app.services import chat_history_manager
+
+chat_history_manager.add_message(session_id, "user", "Hello")
+history = chat_history_manager.get_messages(session_id)
+```
+
+### 3. **API Router Separation** ([app/api/](app/api/))
+
+路由按功能分离:
+
+- **[chat.py](app/api/chat.py)**: WebSocket + REST chat endpoints
+- **[sandbox.py](app/api/sandbox.py)**: Sandbox monitoring endpoints
+- **[deps.py](app/api/deps.py)**: Shared dependencies (future auth)
+
+### 4. **Service Layer Pattern** ([app/services/](app/services/))
+
+业务逻辑独立于 API:
+
+- **[agent.py](app/services/agent.py)**: Agent 核心逻辑
+- **[mcp_client.py](app/services/mcp_client.py)**: MCP 连接管理
+- **[chat_history.py](app/services/chat_history.py)**: 对话历史管理
+
+**优势**:
+- 易于单元测试
+- 可复用于 CLI、Jupyter、其他接口
+- 符合 SOLID 原则
+
+---
+
+## 📡 API Endpoints
+
+### Chat Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| WebSocket | `/chat/ws` | Real-time chat with agent |
+| POST | `/chat/api` | REST chat endpoint |
+| POST | `/chat/clear?session_id=xxx` | Clear chat history |
+| GET | `/chat/sessions` | List active sessions |
+
+### Sandbox Monitoring
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/sandbox/status` | MCP server status |
+| GET | `/api/sandbox/processes` | Running processes |
+| GET | `/api/sandbox/resources` | CPU/Memory/Disk usage |
+| GET | `/api/sandbox/logs` | Supervisor logs |
+| GET | `/api/sandbox/marketplace` | Available MCPs |
+
+### Health & Info
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/` | Service information |
+| GET | `/health` | Health check |
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run specific test
+pytest tests/test_agent.py
+
+# With coverage
+pytest --cov=app tests/
+```
+
+---
+
+## 📚 Migration Guide (from Old Structure)
+
+### Import Changes
+
+**Old**:
+```python
+from config import settings
+from agent import sandbox_agent
+from mcp_client import mcp_manager
+```
+
+**New**:
+```python
+from app.core import settings
+from app.services import sandbox_agent, mcp_manager
+```
+
+### Running the App
+
+**Old**:
 ```bash
 python main.py
 ```
 
-Server will start at: http://localhost:8000
+**New**:
+```bash
+python -m app.main
+# or
+uvicorn app.main:app --reload
+```
 
-## Configuration
+### WebSocket Protocol
 
-### Environment Variables
+协议未变,但新增 `thread_id` 支持:
 
-See [.env.example](.env.example) for all available options.
-
-**Key Settings:**
-
-- `LLM_PROVIDER`: `ollama` or `deepseek`
-- `OLLAMA_MODEL`: Model name (e.g., `deepseek-r1:1.5b`)
-- `SANDBOX_CONTAINER_NAME`: Docker container name
-- `BACKEND_PORT`: API server port (default: 8000)
-
-### Choosing an LLM
-
-**Ollama (Recommended for Development):**
-- ✅ Free and local
-- ✅ No API keys needed
-- ✅ Fast on M1/M2/M3 Macs
-- ⚠️ Requires ~4GB RAM minimum
-
-**DeepSeek (Cloud Option):**
-- ✅ More powerful models
-- ✅ No local resources needed
-- ⚠️ Requires API key
-- ⚠️ Costs money per request
-
-## API Endpoints
-
-### HTTP Endpoints
-
-- `GET /` - Server info
-- `GET /health` - Health check
-- `POST /chat/clear` - Clear chat history
-
-### WebSocket
-
-- `ws://localhost:8000/ws/chat` - Chat with AI
-
-**Message Format:**
-
-Client → Server:
 ```json
+// Client → Server
 {
-  "message": "List files in the workspace"
+  "message": "List available tools",
+  "thread_id": "optional-thread-id"  // 新增!
+}
+
+// Server → Client
+{
+  "type": "response",
+  "content": "Here are the available tools...",
+  "thread_id": "user-session-123"  // 返回使用的 thread_id
 }
 ```
 
-Server → Client:
-```json
-{
-  "type": "response",  // or "error", "thinking"
-  "content": "Here are the files..."
-}
-```
+---
 
-## Available MCP Tools
+## 🔮 Future Enhancements
 
-The agent has access to 21 tools across 3 MCP servers:
+### Production Considerations
 
-### Shell Tools (4)
-- `execute_command` - Run shell commands
-- `execute_shell_script` - Run bash scripts
-- `get_running_processes` - List processes
-- `kill_process` - Terminate processes
+1. **PostgreSQL Checkpointer** (替代 MemorySaver):
+   ```bash
+   pip install langgraph-checkpoint-postgres
+   ```
+   ```python
+   from langgraph.checkpoint.postgres import PostgresSaver
+   checkpointer = PostgresSaver(connection_string="postgresql://...")
+   ```
 
-### Filesystem Tools (8)
-- `read_file` - Read file contents
-- `write_file` - Write to files
-- `list_directory` - List directory contents
-- `search_files` - Search with glob patterns
-- `create_directory` - Create directories
-- `delete_file` - Delete files/directories
-- `move_file` - Move/rename files
-- `get_file_info` - Get file metadata
+2. **Authentication** (使用 `app/api/deps.py`):
+   ```python
+   from app.api.deps import require_auth
 
-### Chrome Tools (9)
-- `launch_browser` - Start Chrome browser
-- `close_browser` - Close browser
-- `navigate_to_url` - Navigate to URL
-- `get_page_content` - Get page HTML/text
-- `click_element` - Click elements by selector
-- `type_text` - Type into input fields
-- `wait_for_element` - Wait for element to appear
-- `take_screenshot` - Capture screenshots
-- `execute_javascript` - Run JavaScript
+   @router.post("/chat/api")
+   async def chat(request: ChatRequest, user=Depends(require_auth)):
+       # 认证后才能访问
+   ```
 
-## Example Usage
+3. **Rate Limiting**:
+   ```bash
+   pip install slowapi
+   ```
 
-### Via Python
+4. **Observability**:
+   - LangSmith for agent tracing
+   - Prometheus metrics
+   - Structured logging to ELK
 
-```python
-import asyncio
-from agent import sandbox_agent
+---
 
-async def main():
-    # Initialize agent
-    await sandbox_agent.initialize()
+## 📖 Related Documentation
 
-    # Run command
-    response = await sandbox_agent.run(
-        "List all Python files in the workspace"
-    )
+- [LangGraph Memory Documentation](https://docs.langchain.com/oss/python/langgraph/add-memory)
+- [LangChain 1.X Migration Guide](https://python.langchain.com/docs/versions/migrating_chains/)
+- [MCP Protocol Specification](https://modelcontextprotocol.io/)
 
-    print(response)
+---
 
-asyncio.run(main())
-```
+## 🙏 Acknowledgments
 
-### Via WebSocket (JavaScript)
+This refactoring follows best practices from:
+- **LangChain 1.X** official documentation
+- **LangGraph** checkpointing patterns (2025-2026)
+- **FastAPI** project structure recommendations
 
-```javascript
-const ws = new WebSocket('ws://localhost:8000/ws/chat');
+**Sources**:
+- [Memory - Docs by LangChain](https://docs.langchain.com/oss/python/langgraph/add-memory)
+- [Mastering LangGraph Checkpointing: Best Practices for 2025](https://sparkco.ai/blog/mastering-langgraph-checkpointing-best-practices-for-2025)
 
-ws.onopen = () => {
-  ws.send(JSON.stringify({
-    message: "Create a file called hello.txt with 'Hello World'"
-  }));
-};
+---
 
-ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  console.log(data.type, data.content);
-};
-```
-
-## Development
-
-### Project Structure
-
-```
-backend/
-├── main.py           # FastAPI server
-├── agent.py          # LangChain agent with MCP tools
-├── mcp_client.py     # MCP client wrapper
-├── llm.py            # LLM configuration (Ollama/DeepSeek)
-├── config.py         # Settings and configuration
-├── requirements.txt  # Python dependencies
-└── .env.example      # Environment variables template
-```
-
-### Testing
-
-```bash
-# Test MCP connection
-python -c "
-import asyncio
-from mcp_client import mcp_manager
-
-async def test():
-    tools = await mcp_manager.list_tools('shell')
-    print(f'Found {len(tools)} tools')
-
-asyncio.run(test())
-"
-```
-
-### Debugging
-
-Set `LOG_LEVEL=DEBUG` in `.env` for verbose logging.
-
-## Troubleshooting
-
-### "Module 'mcp' not found"
-
-```bash
-pip install mcp
-```
-
-### "Cannot connect to Ollama"
-
-```bash
-# Make sure Ollama is running
-ollama serve
-
-# Check if model is available
-ollama list
-```
-
-### "Cannot connect to sandbox container"
-
-```bash
-# Check container is running
-docker ps | grep sandbox
-
-# Check MCP servers are running
-docker exec sandbox-sandbox-os-1 ps aux | grep mcp
-```
-
-## Next Steps
-
-1. **Frontend Integration**: Add chat window to Vue frontend
-2. **Session Management**: Implement per-user chat sessions
-3. **Tool Permissions**: Add approval workflow for destructive operations
-4. **Streaming**: Implement streaming responses for better UX
-5. **Persistence**: Save chat history to database
-
-## License
-
-MIT
+**Built with ❤️ using LangChain 1.X + LangGraph**

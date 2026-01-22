@@ -1,0 +1,125 @@
+{
+  "analysis": {
+    "cloud_chips": [
+      {
+        "model": "NVIDIA H200",
+        "manufacturer": "NVIDIA",
+        "performance": 1979.0,
+        "power": "700W",
+        "process": "4nm"
+      },
+      {
+        "model": "AMD MI300X",
+        "manufacturer": "AMD",
+        "performance": 1634.0,
+        "power": "750W",
+        "process": "5nm"
+      },
+      {
+        "model": "Google TPU v5",
+        "manufacturer": "Google",
+        "performance": 2750.0,
+        "power": "900W",
+        "process": "4nm"
+      },
+      {
+        "model": "AWS Trainium2",
+        "manufacturer": "AWS",
+        "performance": 340.0,
+        "power": "300W",
+        "process": "5nm"
+      },
+      {
+        "model": "Intel Gaudi 3",
+        "manufacturer": "Intel",
+        "performance": 1835.0,
+        "power": "600W",
+        "process": "5nm"
+      }
+    ],
+    "edge_chips": [
+      {
+        "model": "Qualcomm AI 100 Pro",
+        "manufacturer": "Qualcomm",
+        "performance": 200.0,
+        "power": "75W",
+        "process": "4nm"
+      },
+      {
+        "model": "NVIDIA Jetson Orin Nano",
+        "manufacturer": "NVIDIA",
+        "performance": 40.0,
+        "power": "10W",
+        "process": "8nm"
+      },
+      {
+        "model": "AMD Versal AI Edge",
+        "manufacturer": "AMD",
+        "performance": 171.0,
+        "power": "30W",
+        "process": "7nm"
+      },
+      {
+        "model": "Intel Meteor Lake",
+        "manufacturer": "Intel",
+        "performance": 34.0,
+        "power": "28W",
+        "process": "Intel 4"
+      },
+      {
+        "model": "Hailo-8",
+        "manufacturer": "Hailo",
+        "performance": 26.0,
+        "power": "2.5W",
+        "process": "16nm"
+      }
+    ],
+    "emerging_chips": [
+      {
+        "model": "Mythic AMP",
+        "manufacturer": "Mythic",
+        "performance": 25.0,
+        "power": "3W",
+        "process": "28nm"
+      },
+      {
+        "model": "Lightmatter Envise",
+        "manufacturer": "Lightmatter",
+        "performance": 420.0,
+        "power": "150W",
+        "process": "7nm"
+      }
+    ],
+    "stats": {
+      "total_chips": 15,
+      "cloud_count": 5,
+      "edge_count": 5,
+      "emerging_count": 2,
+      "analysis_date": "2026-01-22"
+    }
+  },
+  "recommendations": [
+    {
+      "category": "云端训练",
+      "recommendation": "Google TPU v5 (Google)",
+      "reason": "最高算力: 2750.0 TFLOPS",
+      "applications": "大规模模型训练、科学计算"
+    },
+    {
+      "category": "边缘推理",
+      "recommendation": "Qualcomm AI 100 Pro / NVIDIA Jetson系列",
+      "reason": "平衡算力、功耗和生态支持",
+      "applications": "智能手机、机器人、IoT设备"
+    },
+    {
+      "category": "新兴技术",
+      "recommendation": "存算一体、光子计算芯片",
+      "reason": "能效比提升10-100倍，长期颠覆性技术",
+      "applications": "专用场景、下一代计算架构"
+    }
+  ],
+  "metadata": {
+    "generated_at": "2026-01-22",
+    "version": "1.0"
+  }
+}

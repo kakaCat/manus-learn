@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VNC Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #222;
+            color: white;
+            font-family: monospace;
+        }
+        #container {
+            width: 100%;
+            height: 800px;
+            background: #000;
+            border: 2px solid #0f0;
+            position: relative;
+        }
+        #info {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div>Status: <span id="status">Not connected</span></div>
+        <div>Container size: <span id="containerSize">-</span></div>
+        <div>Canvas size: <span id="canvasSize">-</span></div>
+        <button onclick="connect()">Connect</button>
+        <button onclick="disconnect()">Disconnect</button>
+    </div>
+    <div id="container"></div>
+
+    <script type="module">
+        import RFB from './sandbox/frontend/node_modules/@novnc/novnc/core/rfb.js';
+
+        let rfb = null;
+        const container = document.getElementById('container');
+        const statusEl = document.getElementById('status');
+        const containerSizeEl = document.getElementById('containerSize');
+        const canvasSizeEl = document.getElementById('canvasSize');
+
+        function updateInfo() {
+            containerSizeEl.textContent = `${container.offsetWidth}x${container.offsetHeight}`;
+            if (rfb && rfb._canvas) {
+                canvasSizeEl.textContent = `${rfb._canvas.width}x${rfb._canvas.height}`;
+            }
+        }
+
+        window.connect = function() {
+            if (rfb) return;
+
+            statusEl.textContent = 'Connecting...';
+            updateInfo();
+
+            rfb = new RFB(container, 'ws://localhost:6080/websockify', {
+                credentials: { password: '' }
+            });
+
+            rfb.addEventListener('connect', () => {
+                statusEl.textContent = 'Connected';
+                console.log('Connected! RFB object:', rfb);
+                console.log('Canvas:', rfb._canvas);
+                console.log('Display:', rfb._display);
+
+                // Try different scaling modes
+                rfb.scaleViewport = true;
+                rfb.resizeSession = false;
+
+                updateInfo();
+                setInterval(updateInfo, 1000);
+            });
+
+            rfb.addEventListener('disconnect', () => {
+                statusEl.textContent = 'Disconnected';
+                rfb = null;
+            });
+        };
+
+        window.disconnect = function() {
+            if (rfb) {
+                rfb.disconnect();
+                rfb = null;
+            }
+        };
+
+        updateInfo();
+        window.addEventListener('resize', updateInfo);
+    </script>
+</body>
+</html>
