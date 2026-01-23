@@ -17,7 +17,9 @@ class MCPClientManager:
     def __init__(self):
         """Initialize the MCP client manager."""
         self.sessions: Dict[str, ClientSession] = {}
-        self.context_managers: Dict[str, Any] = {}  # Store context managers to keep connections alive
+        self.context_managers: Dict[
+            str, Any
+        ] = {}  # Store context managers to keep connections alive
         self.servers = {
             "shell": f"{settings.mcp_servers_dir}/shell_mcp/server.py",
             "filesystem": "@modelcontextprotocol/server-filesystem",  # Official Filesystem MCP
@@ -185,9 +187,42 @@ class MCPClientManager:
             # Get or create session
             session = await self.connect_server(server_name)
 
-            # Call tool
+            # Call tool with timeout
             logger.debug(f"   Executing tool...")
-            result = await session.call_tool(tool_name, arguments)
+            timeout_seconds = 30  # Default timeout
+
+            # Adjust timeouts based on operation type
+            if "browser" in tool_name.lower() or server_name == "chrome":
+                if "screenshot" in tool_name.lower():
+                    timeout_seconds = (
+                        120  # 2 minutes for screenshots (pages need time to load)
+                    )
+                elif "navigate" in tool_name.lower():
+                    timeout_seconds = 60  # 1 minute for navigation
+                else:
+                    timeout_seconds = 300  # 5 minutes for other browser ops
+            elif "shell" in server_name and (
+                "run" in tool_name.lower() or "execute" in tool_name.lower()
+            ):
+                timeout_seconds = 120  # 2 minutes for shell commands
+            elif "filesystem" in server_name:
+                timeout_seconds = 60  # 1 minute for file operations
+
+            logger.debug(
+                f"   Timeout set to {timeout_seconds}s for {server_name}.{tool_name}"
+            )
+
+            try:
+                result = await asyncio.wait_for(
+                    session.call_tool(tool_name, arguments), timeout=timeout_seconds
+                )
+            except asyncio.TimeoutError:
+                logger.error(
+                    f"⏰ Tool {server_name}.{tool_name} timed out after {timeout_seconds}s"
+                )
+                raise Exception(
+                    f"Tool execution timed out after {timeout_seconds} seconds"
+                )
 
             logger.info(f"✅ Tool {server_name}.{tool_name} completed successfully")
             logger.debug(f"   Result type: {type(result)}")

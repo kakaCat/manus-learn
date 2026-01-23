@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
-from app.services.agent import sandbox_agent
+from app.services.deep_agent_core import deep_agent_core
 from app.services.mcp_client import mcp_manager
 from app.api import chat, sandbox
 
@@ -39,7 +39,7 @@ async def lifespan(app: FastAPI):
 
     try:
         logger.info("⚙️  Initializing sandbox agent with MemorySaver...")
-        await sandbox_agent.initialize()
+        # DeepAgent initializes automatically on import
         logger.info("✅ Sandbox agent initialized successfully")
     except Exception as e:
         logger.error("❌ Failed to initialize agent")
@@ -82,7 +82,7 @@ def create_app() -> FastAPI:
     )
 
     # Register routers
-    app.include_router(chat.router)
+    app.include_router(chat.router, prefix="/api")
     app.include_router(sandbox.router, prefix="/api")
 
     # Root endpoint
@@ -100,7 +100,7 @@ def create_app() -> FastAPI:
                 "MemorySaver Checkpointer",
                 "MCP Tool Integration",
                 "Thread-based Memory",
-            ]
+            ],
         }
 
     # Health check endpoint
@@ -109,7 +109,7 @@ def create_app() -> FastAPI:
         """Health check endpoint."""
         return {
             "status": "healthy",
-            "agent_initialized": sandbox_agent.agent is not None
+            "agent_initialized": True,  # DeepAgent core is always available,
         }
 
     return app

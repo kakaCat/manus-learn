@@ -19,48 +19,78 @@
 ### 1分钟启动
 
 ```bash
+# 方法1: 使用快速启动脚本 (推荐)
+./scripts/quick_start.sh
+
+# 方法2: 手动启动
 # 启动沙盒容器
 cd sandbox && docker-compose up -d
 
 # 安装后端依赖
-cd ../backend && pip install -r requirements.txt
+cd ../backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 
-# 安装并启动Ollama(可选)
+# 安装并启动Ollama
 brew install ollama
 ollama serve
-ollama pull deepseek-r1:1.5b
+ollama pull qwen2.5:3b  # 或 deepseek-r1:1.5b
 
 # 配置并启动后端
 cp .env.example .env
-python main.py
+python -m app.main
+
+# 启动前端
+cd ../frontend
+npm install
+npm run dev
 ```
 
 **访问地址**:
 - VNC前端: http://localhost:5173
-- 后端API: http://localhost:8000
-- WebSocket: ws://localhost:8000/ws/chat
+- 后端API: http://localhost:8000/docs
+- WebSocket: ws://localhost:8000/chat/ws
 
 ## 📁 项目结构
 
 ```
 manus-learn/
-├── sandbox/              # Docker沙盒环境
-│   ├── docker/          # Dockerfile和supervisord配置
-│   ├── frontend/        # Vue + noVNC前端
-│   ├── mcp-servers/     # 3个MCP服务器(21个工具)
-│   ├── shared/          # workspace卷挂载
-│   └── test_mcp_servers.py  # MCP测试脚本
+├── backend/             # LangChain + FastAPI 后端
+│   ├── app/
+│   │   ├── api/        # API路由 (chat, sandbox)
+│   │   ├── core/       # 核心配置 (config, llm, logging)
+│   │   ├── models/     # Pydantic模型
+│   │   ├── services/   # 业务逻辑 (agent, mcp_client)
+│   │   └── main.py     # FastAPI应用入口
+│   ├── tests/          # 测试文件
+│   └── requirements.txt
 │
-├── backend/             # LangChain后端
-│   ├── main.py         # FastAPI服务器
-│   ├── agent.py        # LangChain Agent
-│   ├── mcp_client.py   # MCP客户端
-│   ├── llm.py          # LLM集成
-│   └── config.py       # 配置管理
+├── frontend/           # Vue 3 + noVNC 前端
+│   ├── src/
+│   │   ├── components/ # UI组件 (Chat, Monitor, VNC)
+│   │   └── App.vue
+│   └── package.json
 │
-├── QUICKSTART.md       # 快速启动指南
-├── IMPLEMENTATION_SUMMARY.md  # 实现总结
-└── README.md           # 本文件
+├── sandbox/            # Docker沙盒环境
+│   ├── docker/         # Dockerfile + supervisord
+│   ├── mcp-servers/    # MCP服务器代码
+│   │   ├── shell_mcp/  # Shell工具 (4个)
+│   │   ├── mcp_manager/# Meta-MCP管理器
+│   │   └── common/     # 公共模块
+│   ├── shared/         # workspace卷挂载
+│   └── docker-compose.yml
+│
+├── scripts/            # 启动和部署脚本
+│   ├── quick_start.sh
+│   └── start-docker.sh
+│
+├── docs/               # 项目文档
+│   └── blog/          # 博客文章
+│
+├── .gitignore
+├── CLAUDE.md          # Claude Code 指引
+└── README.md          # 本文件
 ```
 
 ## 🏗️ 系统架构
@@ -115,14 +145,15 @@ manus-learn/
 
 ```python
 import asyncio
-from backend.agent import sandbox_agent
+from app.services import sandbox_agent
 
 async def main():
     await sandbox_agent.initialize()
 
     # 让AI帮你操作沙盒
     response = await sandbox_agent.run(
-        "创建一个Python脚本,爬取example.com的标题"
+        user_input="创建一个Python脚本,爬取example.com的标题",
+        thread_id="user-123"  # 线程ID用于保持会话上下文
     )
 
     print(response)
@@ -133,11 +164,12 @@ asyncio.run(main())
 ### WebSocket聊天
 
 ```javascript
-const ws = new WebSocket('ws://localhost:8000/ws/chat');
+const ws = new WebSocket('ws://localhost:8000/chat/ws');
 
 ws.onopen = () => {
   ws.send(JSON.stringify({
-    message: "列出所有Python文件并统计行数"
+    message: "列出所有Python文件并统计行数",
+    thread_id: "user-123"  // 保持会话上下文
   }));
 };
 
@@ -149,10 +181,10 @@ ws.onmessage = (event) => {
 
 ## 📚 文档
 
-- [快速启动指南](./QUICKSTART.md) - 5分钟上手
-- [实现总结](./IMPLEMENTATION_SUMMARY.md) - 完整功能列表
-- [后端文档](./backend/README.md) - API和配置
-- [MCP服务器文档](./sandbox/IMPLEMENTATION_COMPLETE.md) - 工具详情
+- [Claude Code 指引](./CLAUDE.md) - AI开发助手配置
+- [后端文档](./backend/README.md) - API和配置详情
+- [前端文档](./frontend/FRONTEND_GUIDE.md) - Vue组件说明
+- [博客文章](./docs/blog/) - 技术分享和架构设计
 
 ## 🛠️ 技术栈
 
@@ -169,11 +201,13 @@ ws.onmessage = (event) => {
 
 **后端**:
 - FastAPI + WebSocket
-- LangChain + LangGraph
+- LangChain 1.X + LangGraph
+- MemorySaver (线程化会话)
 - Ollama/DeepSeek LLM
 
 **前端**:
-- Vue 3
+- Vue 3 + Vite
+- Tailwind CSS
 - noVNC WebSocket客户端
 
 ## 🔒 安全特性

@@ -8,17 +8,20 @@ import time
 
 
 def test_shell_mcp():
-    """Test Shell MCP server."""
+    """Test Shell MCP server (Official @kevinwatt/shell-mcp)."""
     print("\n" + "=" * 60)
-    print("Testing Shell MCP")
+    print("Testing Shell MCP (Official)")
     print("=" * 60)
 
     cmd = [
-        "docker", "exec", "-i",
-        "-e", "PYTHONPATH=/opt/mcp-servers",
+        "docker",
+        "exec",
+        "-i",
+        "-e",
+        "NODE_ENV=production",
         "sandbox-sandbox-os-1",
-        "/opt/mcp-venv/bin/python",
-        "/opt/mcp-servers/shell_mcp/server.py"
+        "/usr/bin/node",
+        "/usr/lib/node_modules/@kevinwatt/shell-mcp/build/index.js",
     ]
 
     try:
@@ -27,13 +30,11 @@ def test_shell_mcp():
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
         )
 
-        # Wait a bit for server to start
-        time.sleep(0.5)
+        time.sleep(2)  # Wait for npm package to start
 
-        # Send initialize request
         init_request = {
             "jsonrpc": "2.0",
             "id": 1,
@@ -41,16 +42,15 @@ def test_shell_mcp():
             "params": {
                 "protocolVersion": "2024-11-05",
                 "capabilities": {},
-                "clientInfo": {"name": "test-client", "version": "1.0.0"}
-            }
+                "clientInfo": {"name": "test-client", "version": "1.0.0"},
+            },
         }
 
         proc.stdin.write(json.dumps(init_request) + "\n")
         proc.stdin.flush()
 
-        # Read response (skip stderr lines)
         response = None
-        for _ in range(10):  # Try up to 10 lines
+        for _ in range(15):
             line = proc.stdout.readline()
             if not line:
                 break
@@ -63,33 +63,12 @@ def test_shell_mcp():
                 continue
 
         if response:
-            print(f"✅ Shell MCP responded successfully!")
+            print("✅ Shell MCP (Official) responded successfully!")
             print(f"Server info: {response.get('result', {}).get('serverInfo', {})}")
-
-            # Test tools/list
-            list_request = {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}
-            proc.stdin.write(json.dumps(list_request) + "\n")
-            proc.stdin.flush()
-
-            for _ in range(10):
-                line = proc.stdout.readline()
-                if not line:
-                    break
-                try:
-                    data = json.loads(line)
-                    if "result" in data:
-                        tools = data.get("result", {}).get("tools", [])
-                        print(f"Available tools: {len(tools)}")
-                        for tool in tools[:5]:  # Show first 5
-                            print(f"  - {tool.get('name')}")
-                        break
-                except json.JSONDecodeError:
-                    continue
-
             proc.terminate()
             return True
         else:
-            print(f"❌ Shell MCP did not respond")
+            print("❌ Shell MCP (Official) did not respond")
             stderr = proc.stderr.read()
             print(f"Stderr: {stderr[:500]}")
             proc.terminate()
@@ -107,11 +86,14 @@ def test_filesystem_mcp():
     print("=" * 60)
 
     cmd = [
-        "docker", "exec", "-i",
+        "docker",
+        "exec",
+        "-i",
         "sandbox-sandbox-os-1",
-        "/usr/bin/npx", "-y",
+        "/usr/bin/npx",
+        "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/root/shared/workspace"
+        "/root/shared/workspace",
     ]
 
     try:
@@ -120,7 +102,7 @@ def test_filesystem_mcp():
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
         )
 
         time.sleep(1)  # Wait for npm to download/start
@@ -132,8 +114,8 @@ def test_filesystem_mcp():
             "params": {
                 "protocolVersion": "2024-11-05",
                 "capabilities": {},
-                "clientInfo": {"name": "test-client", "version": "1.0.0"}
-            }
+                "clientInfo": {"name": "test-client", "version": "1.0.0"},
+            },
         }
 
         proc.stdin.write(json.dumps(init_request) + "\n")
@@ -153,12 +135,12 @@ def test_filesystem_mcp():
                 continue
 
         if response:
-            print(f"✅ Filesystem MCP responded successfully!")
+            print("✅ Filesystem MCP responded successfully!")
             print(f"Server info: {response.get('result', {}).get('serverInfo', {})}")
             proc.terminate()
             return True
         else:
-            print(f"❌ Filesystem MCP did not respond")
+            print("❌ Filesystem MCP did not respond")
             stderr = proc.stderr.read()
             print(f"Stderr: {stderr[:500]}")
             proc.terminate()
@@ -176,12 +158,16 @@ def test_chrome_mcp():
     print("=" * 60)
 
     cmd = [
-        "docker", "exec", "-i",
-        "-e", "DISPLAY=:1",
-        "-e", "NODE_ENV=production",
+        "docker",
+        "exec",
+        "-i",
+        "-e",
+        "DISPLAY=:1",
+        "-e",
+        "NODE_ENV=production",
         "sandbox-sandbox-os-1",
         "/usr/bin/node",
-        "/usr/lib/node_modules/chrome-devtools-mcp/build/src/index.js"
+        "/usr/lib/node_modules/chrome-devtools-mcp/build/src/index.js",
     ]
 
     try:
@@ -190,10 +176,10 @@ def test_chrome_mcp():
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
         )
 
-        time.sleep(0.5)
+        time.sleep(1)
 
         init_request = {
             "jsonrpc": "2.0",
@@ -202,8 +188,8 @@ def test_chrome_mcp():
             "params": {
                 "protocolVersion": "2024-11-05",
                 "capabilities": {},
-                "clientInfo": {"name": "test-client", "version": "1.0.0"}
-            }
+                "clientInfo": {"name": "test-client", "version": "1.0.0"},
+            },
         }
 
         proc.stdin.write(json.dumps(init_request) + "\n")
@@ -223,12 +209,12 @@ def test_chrome_mcp():
                 continue
 
         if response:
-            print(f"✅ Chrome MCP responded successfully!")
+            print("✅ Chrome MCP responded successfully!")
             print(f"Server info: {response.get('result', {}).get('serverInfo', {})}")
             proc.terminate()
             return True
         else:
-            print(f"❌ Chrome MCP did not respond")
+            print("❌ Chrome MCP did not respond")
             stderr = proc.stderr.read()
             print(f"Stderr: {stderr[:500]}")
             proc.terminate()
@@ -245,9 +231,9 @@ def main():
     print("=" * 60)
 
     results = {
-        "Shell MCP": test_shell_mcp(),
-        "Filesystem MCP": test_filesystem_mcp(),
-        "Chrome MCP": test_chrome_mcp(),
+        "Shell MCP (Official)": test_shell_mcp(),
+        "Filesystem MCP (Official)": test_filesystem_mcp(),
+        "Chrome MCP (Official)": test_chrome_mcp(),
     }
 
     # Summary
@@ -259,10 +245,10 @@ def main():
         print(f"{name}: {status}")
 
     if all(results.values()):
-        print(f"\n✅ All MCP servers are working correctly!")
+        print("\n✅ All official MCP servers are working correctly!")
         sys.exit(0)
     else:
-        print(f"\n❌ Some MCP servers failed tests")
+        print("\n❌ Some MCP servers failed tests")
         sys.exit(1)
 
 

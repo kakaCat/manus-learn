@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  sandbox-os:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: manus-sandbox-shell
+    container_name: sandbox-shell-mcp
+    volumes:
+      - ./workspace:/root/shared/workspace
+    restart: always

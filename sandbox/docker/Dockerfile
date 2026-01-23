@@ -21,33 +21,14 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install development tools and dependencies for MCP servers
+# Install development tools (minimal for Node.js MCP servers)
 RUN apt-get update && apt-get install -y \
-    software-properties-common \
     curl \
     wget \
     ca-certificates \
     gnupg \
-    build-essential \
-    git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-# Install Python 3.11+
-RUN add-apt-repository ppa:deadsnakes/ppa -y && \
-    apt-get update && apt-get install -y \
-    python3.11 \
-    python3.11-venv \
-    python3.11-dev \
-    python3-pip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set Python 3.11 as default
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
-
-# Configure pip to use Aliyun mirror
-RUN pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 
 # Install Node.js 20.x
 RUN mkdir -p /etc/apt/keyrings && \
@@ -87,20 +68,11 @@ RUN apt-get update && apt-get install -y \
 
 # Install official MCP servers
 RUN npm install -g chrome-devtools-mcp@latest && \
-    npm install -g @modelcontextprotocol/server-filesystem@latest
+    npm install -g @modelcontextprotocol/server-filesystem@latest && \
+    npm install -g @kevinwatt/shell-mcp@latest
 
-# Create MCP servers directories
-RUN mkdir -p /opt/mcp-servers /var/log/mcp /root/shared/workspace /root/shared/workspace/screenshots /root/shared/workspace/downloads
-
-# Set up Python virtual environment for MCP servers
-RUN python3.11 -m venv /opt/mcp-venv
-
-# Copy MCP server code and requirements
-COPY mcp-servers /opt/mcp-servers
-
-# Install MCP server dependencies
-RUN /opt/mcp-venv/bin/pip install --upgrade pip && \
-    /opt/mcp-venv/bin/pip install -r /opt/mcp-servers/requirements.txt
+# Create directories for MCP server logs and workspace
+RUN mkdir -p /var/log/mcp /root/shared/workspace /root/shared/workspace/screenshots /root/shared/workspace/downloads
 
 # Configuration
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

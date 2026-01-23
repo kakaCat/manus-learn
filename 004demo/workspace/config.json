@@ -1,0 +1,28 @@
+{
+  "demo": {
+    "name": "Manus Learn Filesystem MCP Demo",
+    "version": "004",
+    "description": "Demonstration of MCP Filesystem Server capabilities",
+    "features": [
+      "File reading and writing",
+      "Directory browsing",
+      "Search and replace operations",
+      "File metadata queries",
+      "Secure path restrictions"
+    ]
+  },
+  "settings": {
+    "workspace_root": "/root/shared/workspace",
+    "max_file_size": "10MB",
+    "allowed_operations": [
+      "read_file",
+      "write_file",
+      "list_directory",
+      "search_replace",
+      "get_file_info",
+      "move_file",
+      "create_directory",
+      "delete_file"
+    ]
+  }
+}

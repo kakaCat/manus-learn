@@ -29,8 +29,11 @@ def get_llm() -> BaseChatModel:
         llm = ChatOllama(
             base_url=settings.ollama_base_url,
             model=settings.ollama_model,
-            temperature=0.7,
+            temperature=settings.ollama_temperature,
         )
+
+        # ChatOllama doesn't support max_tokens parameter
+        # The max_tokens setting is available for future use if needed
 
         logger.info("Ollama LLM initialized successfully")
         return llm
@@ -41,12 +44,15 @@ def get_llm() -> BaseChatModel:
         if not settings.deepseek_api_key:
             raise ValueError("DEEPSEEK_API_KEY is required for DeepSeek provider")
 
+        # DeepSeek uses OpenAI-compatible API
         llm = ChatOpenAI(
             api_key=settings.deepseek_api_key,
             base_url=settings.deepseek_base_url,
-            model="deepseek-chat",  # DeepSeek's chat model
-            temperature=0.7,
-            streaming=True,
+            model=settings.deepseek_model,
+            temperature=settings.deepseek_temperature,
+            max_tokens=settings.deepseek_max_tokens,
+            timeout=settings.deepseek_timeout,
+            streaming=False,  # Disable streaming for reliability
         )
 
         logger.info("DeepSeek LLM initialized successfully")
@@ -86,12 +92,24 @@ class LLMManager:
 
         lc_messages = []
         for msg in messages:
-            if msg["role"] == "system":
-                lc_messages.append(SystemMessage(content=msg["content"]))
-            elif msg["role"] == "user":
-                lc_messages.append(HumanMessage(content=msg["content"]))
-            elif msg["role"] == "assistant":
-                lc_messages.append(AIMessage(content=msg["content"]))
+            try:
+                if not isinstance(msg, dict):
+                    raise ValueError(f"Message is not dict: {type(msg)} - {msg}")
+
+                role = msg.get("role")
+                content = msg.get("content")
+
+                if role == "system":
+                    lc_messages.append(SystemMessage(content=content))
+                elif role == "user":
+                    lc_messages.append(HumanMessage(content=content))
+                elif role == "assistant":
+                    lc_messages.append(AIMessage(content=content))
+                else:
+                    raise ValueError(f"Unknown role: {role}")
+            except Exception as msg_error:
+                logger.error(f"Error processing message {msg}: {msg_error}")
+                raise
 
         response = await llm.ainvoke(lc_messages)
         return response.content

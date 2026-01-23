@@ -1,0 +1,6 @@
+services:
+  sandbox:
+    container_name: sandbox-filesystem
+    build: .
+    volumes:
+      - ./workspace:/root/shared/workspace

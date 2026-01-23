@@ -14,11 +14,10 @@ The system consists of three main components:
 
 ### 1. Docker Sandbox Container (`sandbox/`)
 - Ubuntu 22.04 container with X11vnc + Xvfb for headless display
-- Runs **4 MCP servers** managed by supervisord:
-  - `mcp-shell`: Command execution (Python, 4 tools)
-  - `mcp-filesystem`: File operations (Node.js official package, 8 tools)
-  - `mcp-manager`: Meta-MCP for managing other MCPs (Python, custom)
-  - `mcp-chrome`: Browser automation (Node.js official package, 9 tools)
+- Runs **3 MCP servers** (all official packages) managed by supervisord:
+  - `mcp-shell`: Command execution (@kevinwatt/shell-mcp, secure whitelisted commands)
+  - `mcp-filesystem`: File operations (@modelcontextprotocol/server-filesystem, 8 tools)
+  - `mcp-chrome`: Browser automation (chrome-devtools-mcp, 9 tools)
 - Workspace directory: `/root/shared/workspace/` (mounted volume)
 - VNC accessible on ports 5900 (VNC) and 6080 (noVNC WebSocket)
 
@@ -44,7 +43,7 @@ backend/app/
 - ✅ Recommended: `qwen2.5:3b`, `qwen2.5:7b`, `llama3.1:8b`
 - ❌ NOT compatible: `deepseek-r1:1.5b` (no tool support)
 
-### 3. Frontend UI (`sandbox/frontend/`)
+### 3. Frontend UI (`frontend/`)
 - Vue 3 + Vite + Tailwind CSS application
 - noVNC viewer for real-time sandbox visualization
 - Chat interface for AI agent interaction
@@ -90,7 +89,7 @@ python -m app.main  # NEW: module execution
 # OR: uvicorn app.main:app --reload
 
 # Terminal 3: Start frontend
-cd sandbox/frontend
+cd frontend
 npm install  # First time only
 npm run dev  # http://localhost:5173
 ```

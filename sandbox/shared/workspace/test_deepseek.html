@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek AI Assistant Test Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #4CAF50;
+        }
+        .test-section.warning {
+            border-left-color: #FF9800;
+        }
+        .test-section.error {
+            border-left-color: #F44336;
+        }
+        h2 {
+            color: #FFD700;
+            margin-top: 0;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .success {
+            background: #4CAF50;
+        }
+        .warning {
+            background: #FF9800;
+        }
+        .error {
+            background: #F44336;
+        }
+        .capability-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .capability {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .timestamp {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+        }
+        .ai-message {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 DeepSeek AI Assistant Test</h1>
+        
+        <div class="test-section">
+            <h2>Test Results Summary</h2>
+            <div class="status success">✅ TEST COMPLETED SUCCESSFULLY</div>
+            <p>DeepSeek AI Assistant has been successfully tested in the sandbox environment with MCP integration.</p>
+        </div>
+
+        <div class="test-section">
+            <h2>Verified Capabilities</h2>
+            <div class="capability-list">
+                <div class="capability">
+                    <h3>📁 File System</h3>
+                    <p>Read/Write/List operations</p>
+                </div>
+                <div class="capability">
+                    <h3>💻 Shell Execution</h3>
+                    <p>Command execution with output</p>
+                </div>
+                <div class="capability">
+                    <h3>🔧 Tool Management</h3>
+                    <p>MCP tool discovery</p>
+                </div>
+                <div class="capability">
+                    <h3>📊 Data Analysis</h3>
+                    <p>Python script execution</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section warning">
+            <h2>Browser Automation</h2>
+            <div class="status warning">⚠️ REQUIRES INSTALLATION</div>
+            <p>Chrome MCP needs to be installed for full browser automation capabilities.</p>
+            <p>User needs to run: <code>docker-compose restart</code> after installation.</p>
+        </div>
+
+        <div class="ai-message">
+            <p><strong>DeepSeek AI Message:</strong> Hello! I'm your AI assistant. I've successfully tested my core capabilities including file operations, shell command execution, and workspace management. I can help you with data analysis, file processing, and various automation tasks. To enhance my capabilities, consider installing additional MCP tools like Brave Search for web search or Memory MCP for persistent storage.</p>
+        </div>
+
+        <div class="test-section">
+            <h2>Environment Details</h2>
+            <ul>
+                <li><strong>Workspace:</strong> /root/shared/workspace</li>
+                <li><strong>User:</strong> root</li>
+                <li><strong>Available MCP Tools:</strong> 5</li>
+                <li><strong>Test Files Created:</strong> deepseek_test.md, test_deepseek.html</li>
+                <li><strong>Python Analysis:</strong> ✅ Successfully executed</li>
+            </ul>
+        </div>
+
+        <div class="timestamp">
+            Test conducted on: <span id="current-date"></span>
+        </div>
+    </div>
+
+    <script>
+        // Set current date
+        const now = new Date();
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        document.getElementById('current-date').textContent = 
+            now.toLocaleDateString('en-US', options);
+        
+        // Add some interactive elements
+        document.querySelectorAll('.capability').forEach(cap => {
+            cap.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            cap.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
