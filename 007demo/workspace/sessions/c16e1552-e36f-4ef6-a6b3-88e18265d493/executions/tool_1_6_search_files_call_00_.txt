@@ -1,0 +1,17 @@
+/root/shared/workspace/README_travel_budget.md
+/root/shared/workspace/demo_budget.sh
+/root/shared/workspace/example_travel_budget.json
+/root/shared/workspace/quick_budget_estimator.py
+/root/shared/workspace/sessions
+/root/shared/workspace/tokyo_travel_guide
+/root/shared/workspace/travel_budget_calculator.py
+/root/shared/workspace/东京5天4夜经典行程安排.md
+/root/shared/workspace/东京住宿信息查询报告.md
+/root/shared/workspace/东京住宿快速参考.txt
+/root/shared/workspace/东京旅游快速查询.txt
+/root/shared/workspace/东京旅游景点活动查询报告.md
+/root/shared/workspace/东京行程快速参考卡.txt
+/root/shared/workspace/实用旅行信息整理.md
+/root/shared/workspace/旅行实用信息快速参考卡.txt
+/root/shared/workspace/旅行快速参考卡.txt
+/root/shared/workspace/综合旅行建议指南.md

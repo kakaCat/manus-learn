@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  sandbox-os:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: manus-sandbox-agent
+    container_name: sandbox-shell-mcp
+    ports:
+      - "6080:6080"
+      - "5900:5900"
+    volumes:
+      - ./workspace:/root/shared/workspace
+    restart: always

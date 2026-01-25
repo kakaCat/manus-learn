@@ -1,0 +1,369 @@
+#!/usr/bin/env python3
+"""
+旅行预算估算工具
+汇总交通、住宿、餐饮、景点门票等费用，提供总预算估算
+"""
+
+import json
+import os
+from datetime import datetime, timedelta
+
+class TravelBudgetCalculator:
+    def __init__(self):
+        self.categories = {
+            'transportation': {
+                'name': '交通费用',
+                'subcategories': {
+                    'flight': '机票',
+                    'train': '火车票',
+                    'bus': '长途汽车',
+                    'taxi': '出租车',
+                    'public_transport': '公共交通',
+                    'car_rental': '租车',
+                    'fuel': '燃油费',
+                    'parking': '停车费'
+                }
+            },
+            'accommodation': {
+                'name': '住宿费用',
+                'subcategories': {
+                    'hotel': '酒店',
+                    'hostel': '青年旅舍',
+                    'airbnb': '民宿',
+                    'resort': '度假村'
+                }
+            },
+            'food': {
+                'name': '餐饮费用',
+                'subcategories': {
+                    'breakfast': '早餐',
+                    'lunch': '午餐',
+                    'dinner': '晚餐',
+                    'snacks': '小吃零食',
+                    'drinks': '饮料酒水'
+                }
+            },
+            'activities': {
+                'name': '景点门票',
+                'subcategories': {
+                    'attractions': '景点门票',
+                    'museums': '博物馆',
+                    'shows': '演出表演',
+                    'tours': '导览服务',
+                    'activities': '活动体验'
+                }
+            },
+            'shopping': {
+                'name': '购物费用',
+                'subcategories': {
+                    'souvenirs': '纪念品',
+                    'clothing': '衣物',
+                    'electronics': '电子产品',
+                    'local_products': '当地特产'
+                }
+            },
+            'miscellaneous': {
+                'name': '其他费用',
+                'subcategories': {
+                    'insurance': '旅行保险',
+                    'visa': '签证费用',
+                    'sim_card': '电话卡',
+                    'tips': '小费',
+                    'emergency': '应急资金'
+                }
+            }
+        }
+        
+        self.budget_data = {
+            'trip_info': {},
+            'expenses': {},
+            'total_budget': 0
+        }
+    
+    def get_trip_info(self):
+        """获取旅行基本信息"""
+        print("=== 旅行预算估算工具 ===")
+        print("请提供以下旅行信息：")
+        
+        trip_info = {}
+        
+        # 目的地
+        destination = input("1. 目的地（城市/国家）：").strip()
+        trip_info['destination'] = destination
+        
+        # 旅行天数
+        while True:
+            try:
+                days = int(input("2. 旅行天数：").strip())
+                if days > 0:
+                    trip_info['days'] = days
+                    break
+                else:
+                    print("天数必须大于0")
+            except ValueError:
+                print("请输入有效的数字")
+        
+        # 旅行人数
+        while True:
+            try:
+                travelers = int(input("3. 旅行人数：").strip())
+                if travelers > 0:
+                    trip_info['travelers'] = travelers
+                    break
+                else:
+                    print("人数必须大于0")
+            except ValueError:
+                print("请输入有效的数字")
+        
+        # 旅行类型
+        print("\n4. 旅行类型：")
+        print("  1) 经济型")
+        print("  2) 标准型")
+        print("  3) 豪华型")
+        
+        while True:
+            try:
+                travel_type = int(input("请选择（1-3）：").strip())
+                if travel_type in [1, 2, 3]:
+                    type_map = {1: 'budget', 2: 'standard', 3: 'luxury'}
+                    trip_info['travel_type'] = type_map[travel_type]
+                    break
+                else:
+                    print("请选择1-3之间的数字")
+            except ValueError:
+                print("请输入有效的数字")
+        
+        # 货币
+        currency = input("5. 货币（如：CNY, USD, EUR, JPY）：").strip().upper()
+        trip_info['currency'] = currency if currency else 'CNY'
+        
+        self.budget_data['trip_info'] = trip_info
+        return trip_info
+    
+    def get_expense_estimates(self):
+        """获取各项费用估算"""
+        print("\n=== 费用估算 ===")
+        print("请为以下各项提供费用估算（按每人每天计算）：")
+        
+        expenses = {}
+        
+        for category_key, category_info in self.categories.items():
+            print(f"\n--- {category_info['name']} ---")
+            
+            category_total = 0
+            category_expenses = {}
+            
+            for sub_key, sub_name in category_info['subcategories'].items():
+                while True:
+                    try:
+                        # 根据旅行类型提供建议价格范围
+                        travel_type = self.budget_data['trip_info']['travel_type']
+                        suggestions = self._get_price_suggestion(category_key, sub_key, travel_type)
+                        
+                        prompt = f"  {sub_name}（建议：{suggestions} {self.budget_data['trip_info']['currency']}）："
+                        amount = input(prompt).strip()
+                        
+                        if amount == '':
+                            # 使用建议的平均值
+                            avg_price = sum(suggestions.values()) / len(suggestions)
+                            amount = avg_price
+                            print(f"    使用建议价格：{amount:.2f}")
+                        else:
+                            amount = float(amount)
+                        
+                        if amount >= 0:
+                            category_expenses[sub_key] = {
+                                'name': sub_name,
+                                'amount': amount,
+                                'unit': f"{self.budget_data['trip_info']['currency']}/人/天"
+                            }
+                            category_total += amount
+                            break
+                        else:
+                            print("金额不能为负数")
+                    except ValueError:
+                        print("请输入有效的数字")
+            
+            expenses[category_key] = {
+                'name': category_info['name'],
+                'subcategories': category_expenses,
+                'daily_per_person': category_total
+            }
+        
+        self.budget_data['expenses'] = expenses
+        return expenses
+    
+    def _get_price_suggestion(self, category, subcategory, travel_type):
+        """根据类别和旅行类型提供价格建议"""
+        suggestions = {
+            'budget': {'min': 0, 'max': 0, 'avg': 0},
+            'standard': {'min': 0, 'max': 0, 'avg': 0},
+            'luxury': {'min': 0, 'max': 0, 'avg': 0}
+        }
+        
+        # 价格建议数据库（可根据实际情况调整）
+        price_db = {
+            'transportation': {
+                'flight': {'budget': (500, 1500, 1000), 'standard': (1000, 3000, 2000), 'luxury': (3000, 10000, 5000)},
+                'train': {'budget': (50, 200, 100), 'standard': (100, 500, 300), 'luxury': (300, 1000, 500)},
+                'taxi': {'budget': (20, 100, 50), 'standard': (50, 200, 100), 'luxury': (100, 500, 300)},
+                'public_transport': {'budget': (5, 30, 15), 'standard': (10, 50, 25), 'luxury': (20, 100, 50)}
+            },
+            'accommodation': {
+                'hotel': {'budget': (100, 300, 200), 'standard': (300, 800, 500), 'luxury': (800, 3000, 1500)},
+                'hostel': {'budget': (50, 150, 100), 'standard': (100, 300, 200), 'luxury': (200, 500, 300)}
+            },
+            'food': {
+                'breakfast': {'budget': (10, 30, 20), 'standard': (20, 50, 35), 'luxury': (50, 150, 100)},
+                'lunch': {'budget': (20, 50, 35), 'standard': (50, 100, 75), 'luxury': (100, 300, 200)},
+                'dinner': {'budget': (30, 80, 55), 'standard': (80, 150, 115), 'luxury': (150, 500, 300)}
+            },
+            'activities': {
+                'attractions': {'budget': (20, 100, 60), 'standard': (50, 200, 125), 'luxury': (100, 500, 300)},
+                'museums': {'budget': (10, 50, 30), 'standard': (30, 100, 65), 'luxury': (50, 200, 125)}
+            }
+        }
+        
+        if category in price_db and subcategory in price_db[category]:
+            if travel_type in price_db[category][subcategory]:
+                min_price, max_price, avg_price = price_db[category][subcategory][travel_type]
+                return f"{min_price}-{max_price}，平均{avg_price}"
+        
+        return "请自行估算"
+    
+    def calculate_total_budget(self):
+        """计算总预算"""
+        trip_info = self.budget_data['trip_info']
+        expenses = self.budget_data['expenses']
+        
+        days = trip_info['days']
+        travelers = trip_info['travelers']
+        
+        total_budget = 0
+        category_totals = {}
+        
+        print("\n=== 预算计算 ===")
+        print(f"旅行天数：{days}天")
+        print(f"旅行人数：{travelers}人")
+        print(f"旅行类型：{trip_info['travel_type']}")
+        print(f"货币：{trip_info['currency']}")
+        print("\n各项费用明细：")
+        
+        for category_key, category_data in expenses.items():
+            daily_per_person = category_data['daily_per_person']
+            category_total = daily_per_person * days * travelers
+            
+            category_totals[category_key] = {
+                'name': category_data['name'],
+                'daily_per_person': daily_per_person,
+                'total': category_total
+            }
+            
+            total_budget += category_total
+            
+            print(f"\n{category_data['name']}:")
+            print(f"  每人每天：{daily_per_person:.2f} {trip_info['currency']}")
+            print(f"  总计：{category_total:.2f} {trip_info['currency']}")
+            
+            # 显示子类别明细
+            for sub_key, sub_data in category_data['subcategories'].items():
+                sub_total = sub_data['amount'] * days * travelers
+                print(f"    {sub_data['name']}: {sub_data['amount']:.2f} × {days}天 × {travelers}人 = {sub_total:.2f}")
+        
+        # 添加应急资金（总预算的10%）
+        emergency_fund = total_budget * 0.1
+        total_with_emergency = total_budget + emergency_fund
+        
+        self.budget_data['total_budget'] = total_with_emergency
+        self.budget_data['category_totals'] = category_totals
+        self.budget_data['emergency_fund'] = emergency_fund
+        
+        print(f"\n=== 预算汇总 ===")
+        print(f"基本预算：{total_budget:.2f} {trip_info['currency']}")
+        print(f"应急资金（10%）：{emergency_fund:.2f} {trip_info['currency']}")
+        print(f"总预算：{total_with_emergency:.2f} {trip_info['currency']}")
+        print(f"人均预算：{total_with_emergency/travelers:.2f} {trip_info['currency']}")
+        print(f"日均预算：{total_with_emergency/days:.2f} {trip_info['currency']}")
+        
+        return total_with_emergency
+    
+    def save_budget_report(self):
+        """保存预算报告"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"travel_budget_{self.budget_data['trip_info']['destination']}_{timestamp}.json"
+        filepath = os.path.join('/root/shared/workspace', filename)
+        
+        report = {
+            'generated_at': datetime.now().isoformat(),
+            'budget_data': self.budget_data
+        }
+        
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(report, f, ensure_ascii=False, indent=2)
+        
+        print(f"\n预算报告已保存到：{filepath}")
+        
+        # 同时生成文本格式的报告
+        txt_filename = f"travel_budget_{self.budget_data['trip_info']['destination']}_{timestamp}.txt"
+        txt_filepath = os.path.join('/root/shared/workspace', txt_filename)
+        
+        self._generate_text_report(txt_filepath)
+        
+        return filepath
+    
+    def _generate_text_report(self, filepath):
+        """生成文本格式的预算报告"""
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write("=== 旅行预算报告 ===\n\n")
+            
+            trip_info = self.budget_data['trip_info']
+            f.write(f"目的地：{trip_info['destination']}\n")
+            f.write(f"旅行天数：{trip_info['days']}天\n")
+            f.write(f"旅行人数：{trip_info['travelers']}人\n")
+            f.write(f"旅行类型：{trip_info['travel_type']}\n")
+            f.write(f"货币：{trip_info['currency']}\n")
+            f.write(f"生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+            
+            f.write("=== 费用明细 ===\n\n")
+            
+            for category_key, category_data in self.budget_data['expenses'].items():
+                f.write(f"{category_data['name']}：\n")
+                for sub_key, sub_data in category_data['subcategories'].items():
+                    f.write(f"  {sub_data['name']}: {sub_data['amount']:.2f} {sub_data['unit']}\n")
+                f.write(f"  每人每天小计：{category_data['daily_per_person']:.2f} {trip_info['currency']}\n\n")
+            
+            f.write("=== 预算汇总 ===\n\n")
+            f.write(f"基本预算：{self.budget_data['total_budget'] - self.budget_data['emergency_fund']:.2f} {trip_info['currency']}\n")
+            f.write(f"应急资金：{self.budget_data['emergency_fund']:.2f} {trip_info['currency']}\n")
+            f.write(f"总预算：{self.budget_data['total_budget']:.2f} {trip_info['currency']}\n")
+            f.write(f"人均预算：{self.budget_data['total_budget']/trip_info['travelers']:.2f} {trip_info['currency']}\n")
+            f.write(f"日均预算：{self.budget_data['total_budget']/trip_info['days']:.2f} {trip_info['currency']}\n")
+            
+            f.write("\n=== 预算建议 ===\n\n")
+            f.write("1. 交通费用：提前预订通常能获得更优惠的价格\n")
+            f.write("2. 住宿费用：考虑地理位置和评价，性价比很重要\n")
+            f.write("3. 餐饮费用：尝试当地特色小吃可以节省预算\n")
+            f.write("4. 景点门票：查看是否有联票或学生优惠\n")
+            f.write("5. 购物费用：合理控制，避免冲动消费\n")
+            f.write("6. 应急资金：建议预留总预算的10%作为应急资金\n")
+        
+        print(f"文本报告已保存到：{filepath}")
+    
+    def run(self):
+        """运行预算计算器"""
+        print("欢迎使用旅行预算估算工具！")
+        print("本工具将帮助您估算旅行所需的各项费用。\n")
+        
+        self.get_trip_info()
+        self.get_expense_estimates()
+        self.calculate_total_budget()
+        
+        save = input("\n是否保存预算报告？(y/n): ").strip().lower()
+        if save == 'y':
+            self.save_budget_report()
+        
+        print("\n感谢使用旅行预算估算工具！祝您旅途愉快！")
+
+if __name__ == "__main__":
+    calculator = TravelBudgetCalculator()
+    calculator.run()

@@ -49,52 +49,13 @@ async def web_search_direct(query: str, num_results: int = 8) -> str:
         if results:
             return "\n".join(results)
         else:
-            # Fallback to mock results for testing
-            return _mock_web_search_results(query, num_results)
+            # No search results available
+            return f"No search results found for query: {query}"
 
     except Exception as e:
-        # Fallback to mock results on any error
-        print(f"Web search failed, using mock results: {e}")
-        return _mock_web_search_results(query, num_results)
-
-
-def _mock_web_search_results(query: str, num_results: int) -> str:
-    """Generate mock search results for testing purposes."""
-    mock_results = [
-        {
-            "title": f"Latest {query} Developments",
-            "url": f"https://example.com/{query.replace(' ', '-')}",
-            "snippet": f"Recent advancements in {query} technology and research findings.",
-        },
-        {
-            "title": f"{query} Best Practices Guide",
-            "url": f"https://example.com/{query.replace(' ', '-')}-guide",
-            "snippet": f"Comprehensive guide covering {query} implementation and best practices.",
-        },
-        {
-            "title": f"Understanding {query}",
-            "url": f"https://example.com/understanding-{query.replace(' ', '-')}",
-            "snippet": f"In-depth explanation of {query} concepts and applications.",
-        },
-        {
-            "title": f"{query} Tools and Resources",
-            "url": f"https://example.com/{query.replace(' ', '-')}-tools",
-            "snippet": f"Collection of useful tools and resources for working with {query}.",
-        },
-        {
-            "title": f"Future of {query}",
-            "url": f"https://example.com/future-{query.replace(' ', '-')}",
-            "snippet": f"Predictions and trends shaping the future of {query} technology.",
-        },
-    ]
-
-    results = []
-    for i, result in enumerate(mock_results[:num_results], 1):
-        results.append(
-            f"{i}. **{result['title']}**\n   URL: {result['url']}\n   {result['snippet']}\n"
-        )
-
-    return "\n".join(results)
+        # Return error message instead of mock results
+        print(f"Web search failed: {e}")
+        return f"Search failed for query '{query}': {str(e)}"
 
 
 async def test_web_search():

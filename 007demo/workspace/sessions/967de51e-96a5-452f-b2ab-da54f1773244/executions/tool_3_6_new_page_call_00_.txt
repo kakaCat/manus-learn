@@ -1,0 +1,16 @@
+# new_page response
+## Pages
+1: https://www.python.org/downloads/release/python-3120/
+2: chrome-error://chromewebdata/
+3: chrome-error://chromewebdata/
+4: https://www.baidu.com/
+5: chrome-error://chromewebdata/
+6: chrome-error://chromewebdata/
+7: chrome-error://chromewebdata/
+8: chrome-error://chromewebdata/
+9: chrome-error://chromewebdata/
+10: chrome-error://chromewebdata/
+11: chrome-error://chromewebdata/
+12: https://www.python.org/downloads/
+13: chrome-error://chromewebdata/
+14: https://www.baidu.com/ [selected]

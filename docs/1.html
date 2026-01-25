@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纽约 ✈️ 日本 | 9日探险计划</title>
+    <style>
+        :root {
+            --primary: #e63946;
+            --dark: #1d3557;
+            --light: #f1faee;
+            --accent: #457b9d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .hero p { font-size: 1.2rem; opacity: 0.9; }
+
+        /* Container */
+        .container { max-width: 900px; margin: -50px auto 50px; padding: 20px; }
+
+        /* Card Style */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        h2 { color: var(--primary); border-left: 5px solid var(--primary); padding-left: 15px; }
+
+        /* Timeline Items */
+        .day-item {
+            display: flex;
+            margin-bottom: 25px;
+            border-left: 2px dashed #ccc;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .day-item::before {
+            content: '●';
+            position: absolute;
+            left: -9px;
+            color: var(--accent);
+            background: white;
+        }
+
+        .day-number { font-weight: bold; color: var(--accent); min-width: 60px; }
+
+        /* Budget Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        th { background-color: var(--light); color: var(--dark); }
+
+        /* Badge */
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+
+        footer { text-align: center; padding: 40px; color: #888; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <h1>从纽约到霓虹国</h1>
+        <p>跨越 14 小时航程，遇见东京与京都的浪漫</p>
+    </section>
+
+    <div class="container">
+        
+        <div class="card">
+            <h2>行程概览</h2>
+            <p><strong>路线：</strong> 纽约 (JFK) ➔ 东京 (Tokyo) ➔ 京都 (Kyoto) ➔ 东京 ➔ 纽约</p>
+            <p><strong>最佳季节：</strong> 4月樱花季 或 11月枫叶季</p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                <span class="badge">美食探店</span>
+                <span class="badge">文化遗产</span>
+                <span class="badge">城市漫游</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>每日行程安排</h2>
+            
+            <div class="day-item">
+                <div class="day-number">Day 1-2</div>
+                <div>
+                    <strong>跨洋飞行与抵达</strong>
+                    <p>乘坐全日空(ANA)或日航(JAL)直飞羽田。由于时差，抵达时已是次日下午。入住新宿，第一晚尝试一兰拉面。</p>
+                </div>
+            </div>
+
+            <div class="day-item">
+                <div class="day-number">Day 3</div>
+                <div>
+                    <strong>东京：传统之光</strong>
+                    <p>早起前往浅草寺雷门，下午转战涩谷。在涩谷 Scramble Crossing 体验全世界最繁忙的十字路口。</p>
+                </div>
+            </div>
+
+            <div class="day-item">
+                <div class="day-number">Day 5</div>
+                <div>
+                    <strong>新干线至京都</strong>
+                    <p>体验极速 Shinkansen。下午前往伏见稻荷大社，在千本鸟居下拍摄绝美照片。晚上在先斗町寻找地道居酒屋。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>预计预算 (单人)</h2>
+            <table>
+                <tr>
+                    <th>项目</th>
+                    <th>预计费用 (USD)</th>
+                </tr>
+                <tr>
+                    <td>往返机票 (JFK-HND)</td>
+                    <td>$1,200 - $1,800</td>
+                </tr>
+                <tr>
+                    <td>住宿 (8晚)</td>
+                    <td>$1,000</td>
+                </tr>
+                <tr>
+                    <td>JR Pass/交通</td>
+                    <td>$400</td>
+                </tr>
+                <tr>
+                    <td>餐饮与娱乐</td>
+                    <td>$800</td>
+                </tr>
+                <tr style="font-weight: bold; color: var(--primary);">
+                    <td>总计</td>
+                    <td>~$3,400+</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <footer>
+        © 2026 我的私人旅行手册 - 愿你的日本之行充满惊喜
+    </footer>
+
+</body>
+</html>

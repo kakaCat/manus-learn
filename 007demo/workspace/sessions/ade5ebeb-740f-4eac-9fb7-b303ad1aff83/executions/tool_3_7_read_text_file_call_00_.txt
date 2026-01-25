@@ -1,0 +1,178 @@
+{
+  "generated_at": "2024-01-15T10:30:00",
+  "budget_data": {
+    "trip_info": {
+      "destination": "东京",
+      "days": 7,
+      "travelers": 2,
+      "travel_type": "standard",
+      "currency": "CNY"
+    },
+    "expenses": {
+      "transportation": {
+        "name": "交通费用",
+        "subcategories": {
+          "flight": {
+            "name": "机票",
+            "amount": 2000.0,
+            "unit": "CNY/人/往返"
+          },
+          "train": {
+            "name": "火车票",
+            "amount": 50.0,
+            "unit": "CNY/人/天"
+          },
+          "taxi": {
+            "name": "出租车",
+            "amount": 100.0,
+            "unit": "CNY/人/天"
+          },
+          "public_transport": {
+            "name": "公共交通",
+            "amount": 30.0,
+            "unit": "CNY/人/天"
+          }
+        },
+        "daily_per_person": 180.0
+      },
+      "accommodation": {
+        "name": "住宿费用",
+        "subcategories": {
+          "hotel": {
+            "name": "酒店",
+            "amount": 500.0,
+            "unit": "CNY/人/天"
+          }
+        },
+        "daily_per_person": 500.0
+      },
+      "food": {
+        "name": "餐饮费用",
+        "subcategories": {
+          "breakfast": {
+            "name": "早餐",
+            "amount": 35.0,
+            "unit": "CNY/人/天"
+          },
+          "lunch": {
+            "name": "午餐",
+            "amount": 75.0,
+            "unit": "CNY/人/天"
+          },
+          "dinner": {
+            "name": "晚餐",
+            "amount": 115.0,
+            "unit": "CNY/人/天"
+          },
+          "snacks": {
+            "name": "小吃零食",
+            "amount": 30.0,
+            "unit": "CNY/人/天"
+          }
+        },
+        "daily_per_person": 255.0
+      },
+      "activities": {
+        "name": "景点门票",
+        "subcategories": {
+          "attractions": {
+            "name": "景点门票",
+            "amount": 125.0,
+            "unit": "CNY/人/天"
+          },
+          "museums": {
+            "name": "博物馆",
+            "amount": 65.0,
+            "unit": "CNY/人/天"
+          },
+          "tours": {
+            "name": "导览服务",
+            "amount": 50.0,
+            "unit": "CNY/人/天"
+          }
+        },
+        "daily_per_person": 240.0
+      },
+      "shopping": {
+        "name": "购物费用",
+        "subcategories": {
+          "souvenirs": {
+            "name": "纪念品",
+            "amount": 50.0,
+            "unit": "CNY/人/天"
+          },
+          "local_products": {
+            "name": "当地特产",
+            "amount": 100.0,
+            "unit": "CNY/人/天"
+          }
+        },
+        "daily_per_person": 150.0
+      },
+      "miscellaneous": {
+        "name": "其他费用",
+        "subcategories": {
+          "insurance": {
+            "name": "旅行保险",
+            "amount": 200.0,
+            "unit": "CNY/人/全程"
+          },
+          "sim_card": {
+            "name": "电话卡",
+            "amount": 100.0,
+            "unit": "CNY/人/全程"
+          },
+          "tips": {
+            "name": "小费",
+            "amount": 20.0,
+            "unit": "CNY/人/天"
+          }
+        },
+        "daily_per_person": 48.57
+      }
+    },
+    "total_budget": 19240.0,
+    "category_totals": {
+      "transportation": {
+        "name": "交通费用",
+        "daily_per_person": 180.0,
+        "total": 4320.0
+      },
+      "accommodation": {
+        "name": "住宿费用",
+        "daily_per_person": 500.0,
+        "total": 7000.0
+      },
+      "food": {
+        "name": "餐饮费用",
+        "daily_per_person": 255.0,
+        "total": 3570.0
+      },
+      "activities": {
+        "name": "景点门票",
+        "daily_per_person": 240.0,
+        "total": 3360.0
+      },
+      "shopping": {
+        "name": "购物费用",
+        "daily_per_person": 150.0,
+        "total": 2100.0
+      },
+      "miscellaneous": {
+        "name": "其他费用",
+        "daily_per_person": 48.57,
+        "total": 680.0
+      }
+    },
+    "emergency_fund": 1924.0
+  },
+  "summary": {
+    "destination": "东京",
+    "days": 7,
+    "travelers": 2,
+    "total_budget_with_emergency": 21164.0,
+    "budget_per_person": 10582.0,
+    "budget_per_day": 3023.43,
+    "currency": "CNY"
+  }
+}

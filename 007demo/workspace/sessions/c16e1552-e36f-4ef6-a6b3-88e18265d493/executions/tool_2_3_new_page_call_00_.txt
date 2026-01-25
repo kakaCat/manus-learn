@@ -1,0 +1,18 @@
+# new_page response
+## Pages
+1: https://www.python.org/downloads/release/python-3120/
+2: chrome-error://chromewebdata/
+3: chrome-error://chromewebdata/
+4: https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=%E5%8C%97%E4%BA%AC%E5%87%BA%E5%8F%91%20%E8%88%AA%E7%8F%AD%20%E7%81%AB%E8%BD%A6%20%E6%B1%BD%E8%BD%A6%20%E4%BA%A4%E9%80%9A%E6%96%B9%E5%BC%8F&fenlei=256&oq=%25E5%258C%2597%25E4%25BA%25AC%25E5%2588%25B0%25E4%25BA%25AC%25E4%25B8%259C%25E5%259C%25B0%25E5%258C%25BA%25E4%25BA%25A4%25E9%2580%259A%25E8%25B7%25AF%25E7%25BA%25BF&rsv_pq=b3e1a5c70000d249&rsv_t=af26%2Bw%2Bf%2FGAzoeX5jNzd9EuIY3o6%2BIZZSTUo6pNQJjcg6G2bOX%2B8oFnNZxM&rqlang=cn&rsv_enter=1&rsv_dl=tb_pre&rsv_sug3=28&bs=%E5%8C%97%E4%BA%AC%E5%88%B0%E4%BA%AC%E4%B8%9C%E5%9C%B0%E5%8C%BA%E4%BA%A4%E9%80%9A%E8%B7%AF%E7%BA%BF
+5: chrome-error://chromewebdata/
+6: chrome-error://chromewebdata/
+7: chrome-error://chromewebdata/
+8: chrome-error://chromewebdata/
+9: chrome-error://chromewebdata/
+10: chrome-error://chromewebdata/
+11: chrome-error://chromewebdata/
+12: chrome-error://chromewebdata/
+13: https://www.python.org/downloads/
+14: https://www.baidu.com/
+15: chrome-error://chromewebdata/
+16: https://www.tianxun.com/?previousCultureSource=GEO_LOCATION&redirectedFrom=www.skyscanner.com [selected]
