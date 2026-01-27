@@ -1,0 +1,18 @@
+{
+  "main_memory": {
+    "final_goal": "测试任务",
+    "complexity": "simple",
+    "theme": "general",
+    "user_preferences": {},
+    "milestones_completed": [],
+    "sub_agent_summaries": [
+      "Task 1 (分析测试任务的具体要求和范围): Task completed (timeout).",
+      "Task 2 (准备测试环境和必要的测试工具): Task completed (timeout).",
+      "Task 3 (执行基本的测试用例或功能验证): Task completed (timeout).",
+      "Task 4 (记录测试结果和发现的问题): Task completed (timeout).",
+      "Task 5 (生成测试报告并总结测试完成情况): Task completed (timeout)."
+    ],
+    "global_summary": "The AI acknowledges a series of sub-agent reports indicating that five sequential testing tasks—from analyzing requirements to generating a final report—have all been completed, each with a timeout status.",
+    "summarized_idx": 5
+  }
+}

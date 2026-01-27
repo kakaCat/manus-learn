@@ -1,0 +1,694 @@
+[
+  {
+    "name": "beijing-harbin-travel",
+    "type": "directory",
+    "children": []
+  },
+  {
+    "name": "sessions",
+    "type": "directory",
+    "children": [
+      {
+        "name": "3b38424a-7d3d-4f74-bdba-f74066e4f930",
+        "type": "directory",
+        "children": [
+          {
+            "name": "chat_history.md",
+            "type": "file"
+          },
+          {
+            "name": "executions",
+            "type": "directory",
+            "children": [
+              {
+                "name": "task_1_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_2_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_3_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_4_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_5_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_6_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_7_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_7_new_page_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_9_select_page_call_00_.txt",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "state.json",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "4b50b4ea-040b-4b27-9c09-4fc417eb696d",
+        "type": "directory",
+        "children": [
+          {
+            "name": "chat_history.md",
+            "type": "file"
+          },
+          {
+            "name": "executions",
+            "type": "directory",
+            "children": [
+              {
+                "name": "task_1_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_2_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_3_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_4_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_5_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_10_fill_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_7_new_page_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_8_select_page_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_9_take_snapshot_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_5_shell_ps_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_7_shell_df_call_00_.txt",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "4f3c1e49-2fda-4d4a-bc41-63b0a8675607",
+        "type": "directory",
+        "children": [
+          {
+            "name": "chat_history.md",
+            "type": "file"
+          },
+          {
+            "name": "executions",
+            "type": "directory",
+            "children": [
+              {
+                "name": "task_1_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_2_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_3_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_4_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_5_Agent-general.md",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "6c02d6e9-6fd8-43b6-a415-6d7308346a77",
+        "type": "directory",
+        "children": [
+          {
+            "name": "chat_history.md",
+            "type": "file"
+          },
+          {
+            "name": "executions",
+            "type": "directory",
+            "children": [
+              {
+                "name": "task_1_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_2_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_3_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_4_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_5_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_6_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_7_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_7_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_7_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_8_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_7_read_multiple_files_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_8_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_7_6_read_multiple_files_call_00_.txt",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "967de51e-96a5-452f-b2ab-da54f1773244",
+        "type": "directory",
+        "children": [
+          {
+            "name": "chat_history.md",
+            "type": "file"
+          },
+          {
+            "name": "executions",
+            "type": "directory",
+            "children": [
+              {
+                "name": "task_1_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_2_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_3_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_4_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_5_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_6_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_10_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_7_search_files_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_7_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_10_fill_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_6_new_page_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_8_select_page_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_9_take_snapshot_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_4_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_9_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_5_4_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_5_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_10_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_4_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_7_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_8_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_9_read_text_file_call_00_.txt",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ade5ebeb-740f-4eac-9fb7-b303ad1aff83",
+        "type": "directory",
+        "children": [
+          {
+            "name": "chat_history.md",
+            "type": "file"
+          },
+          {
+            "name": "executions",
+            "type": "directory",
+            "children": [
+              {
+                "name": "task_1_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_2_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_3_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_4_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_5_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_6_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_9_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_10_evaluate_script_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_5_list_pages_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_6_select_page_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_7_take_snapshot_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_8_fill_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_9_click_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_10_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_4_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_7_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_4_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_7_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_8_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_5_4_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_5_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_5_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_10_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_4_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_6_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_7_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_8_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_6_9_read_text_file_call_00_.txt",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ae969209-192b-4771-9e50-489c67b53534",
+        "type": "directory",
+        "children": [
+          {
+            "name": "chat_history.md",
+            "type": "file"
+          },
+          {
+            "name": "executions",
+            "type": "directory",
+            "children": [
+              {
+                "name": "task_1_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_2_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_3_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_4_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_9_read_multiple_files_call_00_.txt",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "c16e1552-e36f-4ef6-a6b3-88e18265d493",
+        "type": "directory",
+        "children": [
+          {
+            "name": "chat_history.md",
+            "type": "file"
+          },
+          {
+            "name": "executions",
+            "type": "directory",
+            "children": [
+              {
+                "name": "task_1_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_2_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_3_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_4_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "task_5_Agent-general.md",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_5_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_1_6_search_files_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_10_evaluate_script_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_3_new_page_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_4_select_page_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_5_take_snapshot_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_6_fill_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_7_click_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_8_evaluate_script_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_2_9_evaluate_script_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_10_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_7_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_8_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_3_9_read_text_file_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_4_read_multiple_files_call_00_.txt",
+                "type": "file"
+              },
+              {
+                "name": "tool_4_5_read_multiple_files_call_00_.txt",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "state.json",
+            "type": "file"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "travel_budget_estimation.md",
+    "type": "file"
+  },
+  {
+    "name": "travel_plans",
+    "type": "directory",
+    "children": [
+      {
+        "name": "5_day_city_tour_itinerary.md",
+        "type": "file"
+      }
+    ]
+  },
+  {
+    "name": "哈尔滨7日游行程规划.md",
+    "type": "file"
+  },
+  {
+    "name": "哈尔滨旅游规划",
+    "type": "directory",
+    "children": []
+  },
+  {
+    "name": "旅行策划方案",
+    "type": "directory",
+    "children": [
+      {
+        "name": "完整旅行策划方案.md",
+        "type": "file"
+      }
+    ]
+  }
+]

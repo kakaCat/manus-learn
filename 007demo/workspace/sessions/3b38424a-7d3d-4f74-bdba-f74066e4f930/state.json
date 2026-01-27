@@ -1,0 +1,20 @@
+{
+  "main_memory": {
+    "final_goal": "007执行北京到哈尔滨7日游的旅行策划",
+    "complexity": "complex",
+    "theme": "general",
+    "user_preferences": {},
+    "milestones_completed": [],
+    "sub_agent_summaries": [
+      "Task 1 (确定旅行日期和出发时间，以便安排交通和住宿): Task completed (timeout).",
+      "Task 2 (查询北京到哈尔滨的交通方式（如飞机、火车），并比较价格和时间): Task completed (timeout).",
+      "Task 3 (预订北京到哈尔滨的往返交通票): Task completed (timeout).",
+      "Task 4 (查询哈尔滨的住宿选项（如酒店、民宿），并预订7晚住宿): Task completed (timeout).",
+      "Task 5 (规划哈尔滨7日游的每日行程，包括景点、活动和餐饮): Task completed (timeout).",
+      "Task 6 (估算旅行总预算，包括交通、住宿、餐饮、门票等费用): Task completed (timeout).",
+      "Task 7 (整理旅行策划文档，包括行程表、预订信息和注意事项): Task completed (timeout)."
+    ],
+    "global_summary": "The AI is managing a travel planning process for a trip from Beijing to Harbin. It has received and acknowledged completion reports from seven sub-agents, each of which handled a specific task: determining travel dates, comparing transportation options, booking round-trip tickets, finding and booking a 7-night stay, planning a daily 7-day itinerary, estimating the total budget, and compiling all the information into a final travel document. All tasks were completed with a timeout status.",
+    "summarized_idx": 7
+  }
+}

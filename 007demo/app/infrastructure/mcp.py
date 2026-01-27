@@ -1,10 +1,30 @@
 import asyncio
+import json
+import re
+import warnings
+import sys
+import io
 from typing import List, Dict, Any, Optional
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from langchain_core.tools import Tool, StructuredTool
 from pydantic import BaseModel, create_model, Field
 from contextlib import AsyncExitStack
+
+# Suppress specific MCP-related warnings
+warnings.filterwarnings("ignore", message=".*JSONRPCMessage.*")
+
+
+class SilentStderr:
+    """Context manager to suppress stderr output"""
+    def __enter__(self):
+        self.original_stderr = sys.stderr
+        sys.stderr = io.StringIO()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stderr = self.original_stderr
+
 
 class MCPClientManager:
     def __init__(self):
@@ -23,7 +43,11 @@ class MCPClientManager:
                 "-e",
                 "NODE_ENV=production",
                 "-e",
-                "LOG_LEVEL=error",
+                "LOG_LEVEL=silent",
+                "-e",
+                "DEBUG=false",
+                "-e",
+                "VERBOSE=false",
                 "sandbox-shell-mcp",
                 "node",
                 "/usr/lib/node_modules/@kevinwatt/shell-mcp/build/index.js",
@@ -40,7 +64,7 @@ class MCPClientManager:
                 "-e",
                 "NODE_ENV=production",
                 "-e",
-                "LOG_LEVEL=error",
+                "LOG_LEVEL=silent",
                 "sandbox-shell-mcp",
                 "npx",
                 "-y",
@@ -59,7 +83,7 @@ class MCPClientManager:
                 "-e",
                 "NODE_ENV=production",
                 "-e",
-                "LOG_LEVEL=error",
+                "LOG_LEVEL=silent",
                 "sandbox-shell-mcp",
                 "node",
                 "/usr/lib/node_modules/chrome-devtools-mcp/build/src/index.js",
@@ -70,12 +94,19 @@ class MCPClientManager:
 
     async def _connect_server(self, name: str, command: str, args: List[str]):
         print(f"🔌 Connecting to {name} MCP server...")
-        server_params = StdioServerParameters(command=command, args=args, env=None)
+        server_params = StdioServerParameters(command=command, args=args, env={
+            "LOG_LEVEL": "silent",  # Reduce server-side logging
+            "NODE_ENV": "production",
+            "DEBUG": "false",
+            "VERBOSE": "false"
+        })
 
         try:
             # We need to keep the context managers alive
-            stdio_ctx = stdio_client(server_params)
-            read, write = await self.exit_stack.enter_async_context(stdio_ctx)
+            # Suppress stderr during connection to avoid JSON-RPC parsing errors
+            with SilentStderr():
+                stdio_ctx = stdio_client(server_params)
+                read, write = await self.exit_stack.enter_async_context(stdio_ctx)
 
             session = ClientSession(read, write)
             await self.exit_stack.enter_async_context(session)
@@ -85,6 +116,8 @@ class MCPClientManager:
             print(f"✅ Connected to {name}")
         except Exception as e:
             print(f"❌ Failed to connect to {name}: {e}")
+            # Even if connection fails, we still want to continue with other servers
+            return
 
     async def get_tools(self, server_name: str) -> List[StructuredTool]:
         if server_name not in self.sessions:

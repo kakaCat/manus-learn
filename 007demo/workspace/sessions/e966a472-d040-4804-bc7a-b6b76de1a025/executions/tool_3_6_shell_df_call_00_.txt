@@ -1,0 +1,8 @@
+Filesystem           1K-blocks      Used Available Use% Mounted on
+overlay              474095688 104430748 345508732  24% /
+tmpfs                    65536         0     65536   0% /dev
+shm                      65536         0     65536   0% /dev/shm
+/dev/vda1            474095688 104430748 345508732  24% /etc/hosts
+/run/host_mark/Users 482797652 444836844  37960808  93% /root/shared/workspace
+tmpfs                  8177664         0   8177664   0% /proc/scsi
+tmpfs                  8177664         0   8177664   0% /sys/firmware
